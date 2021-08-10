@@ -1,7 +1,7 @@
-import User from '../models/User';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import Role from '../models/Role';
+import User from '../models/User';
 
 export const registro = async (req, res) => {
     const { username, email, password, roles } = req.body;
@@ -30,5 +30,16 @@ export const registro = async (req, res) => {
 }
 
 export const ingreso = async (req, res) => {
-    res.json('ingreso')
+    const userFound = await User.findOne({email: req.body.email}).populate("roles");
+
+    if (!userFound) return res.status(400).json({message: "User not found"});
+
+    const matchPassword = await User.comparePassword(req.body.password, userFound.password)
+    if (!matchPassword) return res.status(401).json({token:null, message:'Invalid Password'})
+
+    const token = jwt.sign({id:userFound._id}, config.SECRET, {
+        expiresIn: 86400
+    })
+
+    res.json({token});
 }
