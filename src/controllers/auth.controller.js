@@ -6,10 +6,11 @@ import { generarJWT } from '../helpers/jwt';
 
 
 export const registro = async (req, res) => {
-    const { username, email, password, roles } = req.body;
+    const { firstName, lastName, email, password, roles } = req.body;
 
     const newUser = new User ({
-        username,
+        firstName,
+        lastName,
         email,
         password: await User.encryptPassword(password)
     })
@@ -37,10 +38,10 @@ export const registro = async (req, res) => {
 export const ingreso = async (req, res) => {
     const userFound = await User.findOne({email: req.body.email}).populate("roles");
 
-    if (!userFound) return res.status(400).json({message: "User not found"});
+    if (!userFound) return res.status(400).json({message: "Usuario no encontrado"});
 
     const matchPassword = await User.comparePassword(req.body.password, userFound.password)
-    if (!matchPassword) return res.status(401).json({token:null, message:'Invalid Password'})
+    if (!matchPassword) return res.status(401).json({token:null, message:'Contraseña incorrecta'})
 
     // Generar JWT
     const token = await generarJWT( userFound._id );

@@ -2,9 +2,11 @@ import { SchemaTypes, model, Schema } from "mongoose";
 import bcrypt from 'bcryptjs';
 
 const userSchema = new Schema({
-    username:{
-        type: String,
-        unique:true
+    firstName:{
+        type: String
+    },
+    lastName:{
+        type: String
     },
     email: {
         type:String,
