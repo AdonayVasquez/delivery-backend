@@ -37,12 +37,13 @@ export const registro = async (req, res) => {
 
 export const ingreso = async (req, res) => {
     const userFound = await User.findOne({email: req.body.email}).populate("roles");
-
-    if (!userFound) return res.status(400).json({message: "Usuario no encontrado"});
+    if (req.body.email.length<1) return res.status(400).json({message: "Correo electrónico es requerido"});
+    if (!userFound) return res.status(400).json({message: "Correo electrónico no existe"});
 
     const matchPassword = await User.comparePassword(req.body.password, userFound.password)
+    if (req.body.password.length<1) return res.status(401).json({token:null, message:'La contraseña es requerida'})
     if (!matchPassword) return res.status(401).json({token:null, message:'Contraseña incorrecta'})
-
+    
     // Generar JWT
     const token = await generarJWT( userFound._id );
     /* const token = jwt.sign({id:userFound._id}, config.SECRET, {
