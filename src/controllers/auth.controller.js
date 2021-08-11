@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import config from '../config';
 import Role from '../models/Role';
 import User from '../models/User';
+import { generarJWT } from '../helpers/jwt';
+
 
 export const registro = async (req, res) => {
     const { username, email, password, roles } = req.body;
@@ -22,10 +24,13 @@ export const registro = async (req, res) => {
 
     const savedUser = await newUser.save();
     console.log(savedUser);
-    
-    const token = jwt.sign({id:savedUser._id}, config.SECRET, {
+
+    // Generar JWT
+    const token = await generarJWT( savedUser._id );
+    /* const token = jwt.sign({id:savedUser._id}, config.SECRET, {
         expiresIn: 86400
-    })
+    }) */
+
     res.json({token})
 }
 
@@ -37,9 +42,27 @@ export const ingreso = async (req, res) => {
     const matchPassword = await User.comparePassword(req.body.password, userFound.password)
     if (!matchPassword) return res.status(401).json({token:null, message:'Invalid Password'})
 
-    const token = jwt.sign({id:userFound._id}, config.SECRET, {
+    // Generar JWT
+    const token = await generarJWT( userFound._id );
+    /* const token = jwt.sign({id:userFound._id}, config.SECRET, {
         expiresIn: 86400
-    })
+    }) */
 
     res.json({token});
+}
+
+export const renovarToken = async (req, res) => {
+
+    const _id = req._id;
+
+    // Generar JWT
+    const token = await generarJWT( _id );
+
+    console.log('id desde controller',req._id);
+
+    res.json({
+        ok: true,
+        token
+    });
+
 }
