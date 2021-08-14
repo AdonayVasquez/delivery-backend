@@ -37,12 +37,11 @@ export const obtenerCategoria = async (req, res) => {
 export const nuevaCategoria = async (req, res) => {
 
     try {
-        const { nombreCategoria, imagenCategoria, comercios } = req.body;
+        const { nombreCategoria, imagenCategoria } = req.body;
 
         const nuevaCategoria = new Categoria({
             nombreCategoria,
             imagenCategoria,
-            comercios,
         })
 
         const categoriaGuardada = await nuevaCategoria.save();

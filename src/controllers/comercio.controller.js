@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 export const obtenerComercios = async (req, res) => {
 
     try {
-        const comercios = await Comercio.find({}, {})
+        const comercios = await Comercio.find({}, {}).populate("categoria");
         console.log('Ver comercios');
         res.json(comercios);
     } catch (error) {
@@ -16,7 +16,7 @@ export const obtenerComercio = async (req, res) => {
 
     console.log('detalle de comercio', req.params.id);
     try {
-        const comercio = await Comercio.findOne({ _id: req.params.id });
+        const comercio = await Comercio.findOne({ _id: req.params.id }).populate("categoria");
         res.json(comercio);
     } catch (error) {
         res.status(400).json({message:'Error', err:error})
@@ -27,13 +27,14 @@ export const obtenerComercio = async (req, res) => {
 export const nuevoComercio = async (req, res) => {
 
     try {
-        const { nombreComercio, imagenComercio, horario, ubicacion } = req.body;
+        const { nombreComercio, imagenComercio, horario, ubicacion, categoria } = req.body;
 
         const nuevoComercio = new Comercio({
             nombreComercio,
             imagenComercio,
             horario,
-            ubicacion
+            ubicacion,
+            categoria
         })
 
         const comercioGuardado = await nuevoComercio.save();
@@ -56,6 +57,7 @@ export const editarComercio = async (req, res) => {
         comercioEditar.imagenComercio = req.body.imagenComercio!==undefined ? req.body.imagenComercio : comercioEditar.imagenComercio;
         comercioEditar.horario = req.body.horario!==undefined ? req.body.horario : comercioEditar.horario;
         comercioEditar.ubicacion = req.body.ubicacion!==undefined ? req.body.ubicacion : comercioEditar.ubicacion;
+        comercioEditar.categoria = req.body.categoria!==undefined ? req.body.categoria : comercioEditar.categoria;
 
         const comercioActualizado = await comercioEditar.save();
         console.log('Comercio editado', comercioActualizado);
@@ -71,8 +73,8 @@ export const editarComercio = async (req, res) => {
 export const eliminarComercio = async (req, res) => {
 
     try {
-        const comercioEliminar = await Categoria.findOne({ _id: req.params.id });
-        const comercioEliminado = await Categoria.deleteOne({ _id: comercioEliminar._id });
+        const comercioEliminar = await Comercio.findOne({ _id: req.params.id });
+        const comercioEliminado = await Comercio.deleteOne({ _id: comercioEliminar._id });
         res.json(comercioEliminado);
     } catch (error) {
         res.status(403).json({ message: 'Error en eliminar: ', err: error });

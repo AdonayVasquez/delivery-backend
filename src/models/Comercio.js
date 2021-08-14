@@ -14,6 +14,10 @@ const comercioSchema = new Schema({
     },
     ubicacion:{
         type:Array
+    },
+    categoria: {
+        ref:"Categoria",
+        type: Schema.Types.ObjectId
     }
 
 });

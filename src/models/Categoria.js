@@ -8,11 +8,8 @@ const categoriaSchema = new Schema({
     },
     imagenCategoria:{
         type: String
-    },
-    comercios: [{
-        ref:"Comercio",
-        type: Schema.Types.ObjectId
-    }]
+    }
+    
 });
 
 export default model('Categoria', categoriaSchema);
