@@ -4,7 +4,6 @@ import Role from '../models/Role';
 import User from '../models/User';
 import { generarJWT } from '../helpers/jwt';
 
-
 export const registro = async (req, res) => {
     const { firstName, lastName, email, password, roles } = req.body;
 
