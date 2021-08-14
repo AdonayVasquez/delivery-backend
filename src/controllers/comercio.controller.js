@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 export const obtenerComercios = async (req, res) => {
 
     try {
-        const comercios = await Comercio.find({}, {}).populate("categoria");
+        const comercios = await Comercio.find({}, {}).populate("categoria").populate("productos");
         console.log('Ver comercios');
         res.json(comercios);
     } catch (error) {

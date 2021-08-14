@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 export const obtenerProductos = async (req, res) => {
 
     try {
-        const productos = await Producto.find({}, {});
+        const productos = await Producto.find({}, {}).populate("categoriaProducto");
         console.log('Ver productos');
         res.json(productos);
     } catch (error) {
@@ -16,7 +16,7 @@ export const obtenerProducto = async (req, res) => {
 
     console.log('Detalle de Producto', req.params.id);
     try {
-        const producto = await Producto.findOne({ _id: req.params.id });
+        const producto = await Producto.findOne({ _id: req.params.id }).populate("categoriaProducto");
         res.json(producto);
     } catch (error) {
         res.status(400).json({message:'Error', err:error})
@@ -27,13 +27,14 @@ export const obtenerProducto = async (req, res) => {
 export const nuevoProducto = async (req, res) => {
 
     try {
-        const { nombreProducto, imagenProducto, descripcion, precio } = req.body;
+        const { nombreProducto, imagenProducto, descripcion, precio, categoriaProducto } = req.body;
 
         const nuevoProducto = new Producto({
             nombreProducto,
             imagenProducto,
             descripcion,
             precio,
+            categoriaProducto
         })
 
         const productoGuardado = await nuevoProducto.save();
@@ -56,6 +57,7 @@ export const editarProducto = async (req, res) => {
         productoEditar.imagenProducto = req.body.imagenProducto!==undefined ? req.body.imagenProducto : productoEditar.imagenProducto;
         productoEditar.descripcion = req.body.descripcion!==undefined ? req.body.descripcion : productoEditar.descripcion;
         productoEditar.precio = req.body.precio!==undefined ? req.body.precio : productoEditar.precio;
+        productoEditar.categoriaProducto = req.body.categoriaProducto!==undefined ? req.body.categoriaProducto : productoEditar.categoriaProducto;
 
         const productoActualizado = await productoEditar.save();
         console.log('Producto editado correctamente', productoActualizado);
