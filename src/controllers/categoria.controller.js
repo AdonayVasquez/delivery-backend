@@ -51,7 +51,7 @@ export const nuevaCategoria = async (req, res) => {
 
         res.json(categoriaGuardada);
     } catch (error) {
-        res.status(400).json({message:'No se pudo guardar', err:error});
+        res.status(401).json({message:'No se pudo guardar', err:error});
         console.error('No se pudo guardar', error);
     }
 }
@@ -60,16 +60,17 @@ export const editarCategoria = async (req, res) => {
 
     try {
         const categoriaPut = await Categoria.findOne({ _id: req.params.id });
-        categoriaPut.nombreCategoria = req.body.nombreCategoria;
-        categoriaPut.imagenCategoria = req.body.imagenCategoria;
+        // Se asigna el nuevo valor solo si no es indefinido, de lo contrario permanece el mismo valor
+        categoriaPut.nombreCategoria = req.body.nombreCategoria!==undefined ? req.body.nombreCategoria : categoriaPut.nombreCategoria;
+        categoriaPut.imagenCategoria = req.body.imagenCategoria!==undefined ? req.body.imagenCategoria : categoriaPut.imagenCategoria;
 
         const categoriaActualizada = await categoriaPut.save();
         console.log('Categoria editada', categoriaActualizada);
 
         res.json(categoriaActualizada);
     } catch (error) {
-        res.status(401).json({ message: 'Id no encontrado', err: error })
-        console.error('Id no encontrado', error);
+        res.status(402).json({ message: 'Error en actualizar', err: error })
+        console.error('Error en actualizar', error);
     }
 
 }
@@ -81,8 +82,8 @@ export const eliminarCategoria = async (req, res) => {
         const categoriaEliminada = await Categoria.deleteOne({ _id: categoriaDelete._id });
         res.json(categoriaEliminada);
     } catch (error) {
-        res.status(401).json({ message: 'Id no encontrado', err: error });
-        console.error('Id no encontrado', error);
+        res.status(403).json({ message: 'Error en eliminar', err: error });
+        console.error('Error en eliminar', error);
     }
 
 }

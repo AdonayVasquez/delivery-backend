@@ -7,8 +7,7 @@ const comercioSchema = new Schema({
         required:true
     },
     imagenComercio:{
-        type: String,
-        required:true
+        type: String
     },
     horario: {
         type:String

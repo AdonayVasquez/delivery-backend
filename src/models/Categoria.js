@@ -7,8 +7,7 @@ const categoriaSchema = new Schema({
         required:true
     },
     imagenCategoria:{
-        type: String,
-        required:true
+        type: String
     },
     comercios: [{
         ref:"Comercio",
