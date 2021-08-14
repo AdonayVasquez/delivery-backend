@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import categoriaRoutes from './routes/categoria.routes';
 import comercioRoutes from './routes/comercios.routes';
 import productoRoutes from './routes/producto.routes';
+import categoriaProducto from './routes/categoria-producto.routes';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/comercios', comercioRoutes);
 app.use('/api/productos', productoRoutes);
+app.use('/api/categoria-productos', categoriaProducto)
 
 app.listen(3000);
 console.log('Servidor levantado en puerto: ', 3000);
