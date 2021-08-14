@@ -18,7 +18,11 @@ const comercioSchema = new Schema({
     categoria: {
         ref:"Categoria",
         type: Schema.Types.ObjectId
-    }
+    },
+    productos: [{
+        ref:"Producto",
+        type: Schema.Types.ObjectId
+    }]
 
 });
 

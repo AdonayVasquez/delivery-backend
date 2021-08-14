@@ -14,7 +14,7 @@ export const obtenerComercios = async (req, res) => {
 
 export const obtenerComercio = async (req, res) => {
 
-    console.log('detalle de comercio', req.params.id);
+    console.log('Detalle de comercio', req.params.id);
     try {
         const comercio = await Comercio.findOne({ _id: req.params.id }).populate("categoria");
         res.json(comercio);
